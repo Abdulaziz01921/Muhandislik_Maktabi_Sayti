@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhandislik Maktabi Portali</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0265d6',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        },
+                        tech: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155',
+                            accent: '#38bdf8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f1f5f9;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.25);
+        }
+        .glow-red {
+            box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.3);
+        }
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-grid-pattern flex flex-col justify-between antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- AUTH SYSTEM (Shown initially when user is NOT logged in) -->
+    <div id="auth-container" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
+        <div class="w-full max-w-md bg-tech-card/90 border border-tech-border p-8 rounded-2xl shadow-2xl glow-effect relative overflow-hidden">
+            <!-- Background Accent Shapes -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-400 text-white mb-4 shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid font-bold text-2xl fa-microchip"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-white">Muhandislik Maktabi</h1>
+                <p class="text-xs text-slate-400 mt-1">Ixtisoslashtirilgan STEM & Axborot Texnologiyalari Portali</p>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Foydalanuvchi ID / Logini</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="login-id" placeholder="Ismingizni kiriting" required class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-tech-border rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-white placeholder-slate-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Parol</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="login-pass" placeholder="••••••••" required class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-tech-border rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-white placeholder-slate-500 transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-brand-600 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-semibold rounded-xl shadow-lg shadow-brand-600/30 transition transform active:scale-98 flex items-center justify-center gap-2">
+                    <span>Tizimga Kirish</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+
+                <div class="text-center pt-2">
+                    <p class="text-sm text-slate-400">
+                        Akkountingiz yo'qmi? 
+                        <button type="button" onclick="switchAuthMode('register')" class="text-brand-400 hover:text-brand-300 font-semibold underline underline-offset-4 transition">
+                            Ro'yxatdan o'tish
+                        </button>
+                    </p>
+                </div>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" class="space-y-4 hidden" onsubmit="handleRegister(event)">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Ismingiz</label>
+                    <input type="text" id="reg-firstname" placeholder="Masalan: Ali" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-tech-border rounded-xl focus:ring-2 focus:ring-brand-500 text-sm text-white transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Familiyangiz</label>
+                    <input type="text" id="reg-lastname" placeholder="Masalan: Valiye" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-tech-border rounded-xl focus:ring-2 focus:ring-brand-500 text-sm text-white transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Sinfingizni tanlang</label>
+                    <select id="reg-class" required class="w-full px-4 py-2.5 bg-slate-900/80 border border-tech-border rounded-xl focus:ring-2 focus:ring-brand-500 text-sm text-white transition">
+                        <option value="" disabled selected>Sinfni tanlang...</option>
+                        <option value="7-A">7-A sinf</option>
+                        <option value="7-B">7-B sinf</option>
+                        <option value="8-A">8-A sinf</option>
+                        <option value="8-B">8-B sinf</option>
+                        <option value="9-A">9-A sinf</option>
+                        <option value="9-B">9-B sinf</option>
+                        <option value="10-A">10-A sinf</option>
+                        <option value="10-B">10-B sinf</option>
+                        <option value="11-A">11-A sinf</option>
+                        <option value="11-B">11-B sinf</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-semibold rounded-xl shadow-lg transition transform active:scale-98 flex items-center justify-center gap-2 mt-2">
+                    <i class="fa-solid fa-user-plus text-xs"></i>
+                    <span>Ro'yxatdan o'tish va Kirish</span>
+                </button>
+
+                <div class="text-center pt-2">
+                    <p class="text-sm text-slate-400">
+                        Akkountingiz bormi? 
+                        <button type="button" onclick="switchAuthMode('login')" class="text-brand-400 hover:text-brand-300 font-semibold underline underline-offset-4 transition">
+                            Tizimga kirish
+                        </button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD APP (Hidden until logged in) -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col">
+        <!-- TOP NAVBAR -->
+        <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-tech-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- School Brand Logo -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                            <i class="fa-solid fa-microchip text-lg"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-lg text-white tracking-wide block leading-none">MUHANDISLIK</span>
+                            <span class="text-[10px] tracking-widest text-brand-400 uppercase font-mono font-semibold">Ixtisoslashtirilgan Maktab</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Links (Desktop) -->
+                    <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                        <button onclick="navigate('schedule')" id="nav-schedule" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                            <i class="fa-regular fa-calendar-check text-brand-400"></i>
+                            <span>Dars jadvali</span>
+                        </button>
+                        <button onclick="navigate('news')" id="nav-news" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                            <i class="fa-regular fa-newspaper text-cyan-400"></i>
+                            <span>Yangiliklar</span>
+                        </button>
+                        <button onclick="navigate('tests')" id="nav-tests" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                            <i class="fa-solid fa-vial-virus text-emerald-400"></i>
+                            <span>Testlar</span>
+                        </button>
+                        <button onclick="navigate('about')" id="nav-about" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                            <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                            <span>Biz haqimizda</span>
+                        </button>
+                    </nav>
+
+                    <!-- User Profile & Logout -->
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-tech-border">
+                            <div class="w-8 h-8 rounded-lg bg-brand-600/30 text-brand-300 flex items-center justify-center font-bold text-sm">
+                                <span id="user-avatar-initial">U</span>
+                            </div>
+                            <div class="text-left hidden sm:block">
+                                <p id="user-display-name" class="text-xs font-bold text-white leading-tight">O'quvchi</p>
+                                <p id="user-display-class" class="text-[11px] text-brand-400 font-mono">10-A sinf</p>
+                            </div>
+                        </div>
+
+                        <button onclick="logout()" title="Chiqish" class="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-xl transition">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Sub-navigation Bar -->
+            <div class="md:hidden border-t border-tech-border/50 px-2 py-2 flex justify-around bg-slate-900/95">
+                <button onclick="navigate('schedule')" id="mobile-nav-schedule" class="p-2 text-xs flex flex-col items-center text-slate-400">
+                    <i class="fa-regular fa-calendar-check text-base mb-1"></i>
+                    <span>Jadval</span>
+                </button>
+                <button onclick="navigate('news')" id="mobile-nav-news" class="p-2 text-xs flex flex-col items-center text-slate-400">
+                    <i class="fa-regular fa-newspaper text-base mb-1"></i>
+                    <span>Yangiliklar</span>
+                </button>
+                <button onclick="navigate('tests')" id="mobile-nav-tests" class="p-2 text-xs flex flex-col items-center text-slate-400">
+                    <i class="fa-solid fa-vial-virus text-base mb-1"></i>
+                    <span>Testlar</span>
+                </button>
+                <button onclick="navigate('about')" id="mobile-nav-about" class="p-2 text-xs flex flex-col items-center text-slate-400">
+                    <i class="fa-solid fa-circle-info text-base mb-1"></i>
+                    <span>Biz haqimizda</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            <!-- PAGE 1: DARS JADVALI (SCHEDULE) -->
+            <section id="view-schedule" class="view-section space-y-6">
+                <!-- Schedule Header Banner -->
+                <div class="bg-gradient-to-r from-slate-900 via-tech-card to-slate-900 border border-tech-border p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-300 text-xs font-mono mb-2">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="live-time-display">Bugun: --.--.2026</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Dars Jadvali & Raspisaniya</h2>51111111
+                        <p class="text-sm text-slate-400">Ixtisoslashtirilgan sinflarning kunlik darslar jadvali</p>
+                    </div>
+
+                    <!-- Class & Day Selectors -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div>
+                            <label class="block text-[10px] text-slate-400 font-mono mb-1">SINF</label>
+                            <select id="schedule-class-select" onchange="renderSchedule()" class="bg-slate-900 border border-tech-border text-xs rounded-xl px-3 py-2 text-white font-semibold focus:ring-2 focus:ring-brand-500">
+                                <option value="7-A">7-A sinf</option>
+                                <option value="7-B">7-B sinf</option>
+                                <option value="8-A">8-A sinf</option>
+                                <option value="8-B">8-B sinf</option>
+                                <option value="9-A">9-A sinf</option>
+                                <option value="9-B">9-B sinf</option>
+                                <option value="10-A">10-A sinf</option>
+                                <option value="10-B">10-B sinf</option>
+                                <option value="11-A">11-A sinf</option>
+                                <option value="11-B">11-B sinf</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400 font-mono mb-1">KUN</label>
+                            <select id="schedule-day-select" onchange="renderSchedule()" class="bg-slate-900 border border-tech-border text-xs rounded-xl px-3 py-2 text-white font-semibold focus:ring-2 focus:ring-brand-500">
+                                <option value="1">Dushanba</option>
+                                <option value="2">Seshanba</option>
+                                <option value="3">Chorshanba</option>
+                                <option value="4">Payshanba</option>
+                                <option value="5">Juma</option>
+                                <option value="6">Shanba</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Table View -->
+                <div class="bg-tech-card/80 border border-tech-border rounded-2xl overflow-hidden shadow-2xl">
+                    <div class="px-6 py-4 border-b border-tech-border/80 flex items-center justify-between bg-slate-900/50">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 id="schedule-title" class="font-bold text-white text-base">Bugungi Darslar Ro'yxati</h3>
+                        </div>
+                        <span id="current-day-badge" class="px-3 py-1 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">
+                            Avto-aniqlangan kun
+                        </span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400 font-mono border-b border-tech-border">
+                                <tr>
+                                    <th class="px-6 py-4">№ / Vaqt</th>
+                                    <th class="px-6 py-4">Fan Nomi</th>
+                                    <th class="px-6 py-4">O'qituvchi</th>
+                                    <th class="px-6 py-4">Xona / Lab</th>
+                                    <th class="px-6 py-4 text-center">Turi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-tbody" class="divide-y divide-tech-border/50">
+                                <!-- Rendered dynamically by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: YANGILIKLAR (NEWS) -->
+            <section id="view-news" class="view-section space-y-6 hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Maktab Yangiliklari & STEM E'lonlar</h2>
+                        <p class="text-sm text-slate-400">Loyiha taqdimotlari, olimpiadalar va ilmiy izlanishlar</p>
+                    </div>
+                    <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs rounded-xl font-mono">
+                        So'nggi yangilanish: Bugun
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="news-grid">
+                    <!-- News items loaded via JS -->
+                </div>
+            </section>
+
+            <!-- PAGE 3: TESTLAR (QUIZZES) -->
+            <section id="view-tests" class="view-section space-y-6 hidden">
+                
+                <!-- SUB-VIEW A: Test Selection Screen -->
+                <div id="test-selector-card" class="bg-tech-card border border-tech-border p-6 rounded-2xl shadow-2xl space-y-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Ixtisoslashtirilgan Bilim Testlari</h2>
+                        <p class="text-sm text-slate-400 mt-1">7-11 sinflar uchun Matematika va Ingliz tili chuqurlashtirilgan savollar to'plami</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Class Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Sinfni Tanlang</label>
+                            <select id="test-grade-select" class="w-full bg-slate-900 border border-tech-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-brand-500">
+                                <option value="7">7-sinf (Boshlang'ich muhandislik)</option>
+                                <option value="8">8-sinf (O'rta daraja)</option>
+                                <option value="9">9-sinf (Kengaytirilgan fizika-matematika)</option>
+                                <option value="10">10-sinf (Olimpiada darajasi)</option>
+                                <option value="11">11-sinf (Oliy o'quv yurtiga tayyorgarlik)</option>
+                            </select>
+                        </div>
+
+                        <!-- Subject Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Fanni Tanlang</label>
+                            <select id="test-subject-select" class="w-full bg-slate-900 border border-tech-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-brand-500">
+                                <option value="math">Matematika (Ixtisoslashtirilgan)</option>
+                                <option value="english">Ingliz tili (STEM & Academic English)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Warning Box for Anti-cheat rules -->
+                    <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-base text-amber-400 mt-0.5"></i>
+                        <div>
+                            <span class="font-bold block mb-0.5">Muhim Qoida (Anti-Cheat Tizimi):</span>
+                            Test vaqtida boshqa oyna yoki vkladkaga o'tish taqiqlanadi! Boshqa oynaga o'tsangiz tizim sizni <strong>3 marta ogohlantiradi</strong>. 4-marta o'tsangiz test avtomatik ravishda bekor qilinib, natijangiz saqlanmaydi!
+                        </div>
+                    </div>
+
+                    <button onclick="startQuiz()" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-base">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Testni Boshlash</span>
+                    </button>
+                </div>
+
+                <!-- SUB-VIEW B: Active Quiz View (Hidden initially) -->
+                <div id="active-quiz-container" class="hidden space-y-6">
+                    <!-- Top Bar: Timer, Anti-cheat status, Subject -->
+                    <div class="bg-tech-card border border-tech-border p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <span id="active-quiz-badge" class="px-3 py-1 bg-brand-500/20 text-brand-300 text-xs font-mono rounded-lg border border-brand-500/30">
+                                Matematika - 10 Sinf
+                            </span>
+                            <h3 class="text-lg font-bold text-white mt-1">Savollarga javob bering</h3>
+                        </div>
+
+                        <!-- Timer & Warnings -->
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-xl border border-tech-border font-mono text-emerald-400 font-bold">
+                                <i class="fa-regular fa-clock"></i>
+                                <span id="quiz-timer">15:00</span>
+                            </div>
+                            <div id="cheat-warning-badge" class="px-3 py-2 bg-slate-900 rounded-xl border border-tech-border font-mono text-xs text-slate-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-shield-halved text-brand-400"></i>
+                                Ogohlantirishlar: <span id="warning-count-text" class="text-amber-400 font-bold">0/3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Question Display Box (Left 2 cols) -->
+                        <div class="lg:col-span-2 bg-tech-card border border-tech-border p-6 rounded-2xl flex flex-col justify-between min-h-[380px] shadow-xl">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span id="question-number-indicator" class="text-xs font-mono text-brand-400">Savol 1 / 10</span>
+                                    <button onclick="toggleBookmarkQuestion()" class="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 font-semibold">
+                                        <i class="fa-solid fa-bookmark"></i>
+                                        <span>Belgilash (Sariq)</span>
+                                    </button>
+                                </div>
+
+                                <h4 id="question-text" class="text-lg font-semibold text-white mb-6 leading-relaxed">
+                                    Savol matni yuklanmoqda...
+                                </h4>
+
+                                <!-- Option Buttons -->
+                                <div id="options-container" class="space-y-3">
+                                    <!-- Options injected dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="flex items-center justify-between pt-6 border-t border-tech-border/60 mt-6">
+                                <button onclick="prevQuestion()" id="btn-prev-q" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-xl transition disabled:opacity-40">
+                                    <i class="fa-solid fa-arrow-left mr-1"></i> Oldingisi
+                                </button>
+
+                                <button onclick="nextQuestion()" id="btn-next-q" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-xl transition">
+                                    Keyingisi <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Question Status Palette Table -->
+                        <div class="bg-tech-card border border-tech-border p-6 rounded-2xl space-y-5 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-2">Savollar Holati Jadvali</h4>
+                                <p class="text-xs text-slate-400 mb-4">Har bir savol tugmasini bosib o'tishingiz mumkin</p>
+
+                                <!-- Legend -->
+                                <div class="space-y-2 mb-6 text-xs font-medium">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-3.5 h-3.5 rounded bg-emerald-500 inline-block"></span>
+                                        <span class="text-slate-300">Yashil — Belgilangan (Javob berilgan)</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-3.5 h-3.5 rounded bg-amber-500 inline-block"></span>
+                                        <span class="text-slate-300">Sariq — Saqlangan / Ko'rib chiqilmoqda</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-3.5 h-3.5 rounded bg-rose-500 inline-block"></span>
+                                        <span class="text-slate-300">Qizil — Belgilanmagan (Javobsiz)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Grid Buttons -->
+                                <div id="question-palette-grid" class="grid grid-cols-5 gap-2.5">
+                                    <!-- Buttons generated by JS -->
+                                </div>
+                            </div>
+
+                            <button onclick="finishQuizConfirmation()" class="w-full py-3 bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-400 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm mt-4">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Testni Yakunlash</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-VIEW C: Quiz Result Display (Hidden initially) -->
+                <div id="quiz-result-card" class="hidden bg-tech-card border border-tech-border p-8 rounded-2xl shadow-2xl space-y-6 text-center max-w-2xl mx-auto">
+                    <div class="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-3xl border border-emerald-500/40">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-white">Test Yakunlandi!</h2>
+                        <p class="text-sm text-slate-400 mt-1">Sizning bilim darajangiz va tahliliy natijangiz</p>
+                    </div>
+
+                    <!-- Result Stats Grid -->
+                    <div class="grid grid-cols-3 gap-4 bg-slate-900/80 p-4 rounded-xl border border-tech-border">
+                        <div>
+                            <span class="text-[11px] text-slate-400 block font-mono">UMUMIY SAVOL</span>
+                            <span id="res-total-q" class="text-xl font-bold text-white">10</span>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-400 block font-mono">TO'G'RI JAVOB</span>
+                            <span id="res-correct-q" class="text-xl font-bold text-emerald-400">8</span>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-400 block font-mono">FOIZ (BALL)</span>
+                            <span id="res-percentage" class="text-xl font-bold text-brand-400">80%</span>
+                        </div>
+                    </div>
+
+                    <p id="res-feedback-text" class="text-sm text-slate-300 font-medium italic">
+                        A'lo natija! Muhandislik mantiqiy fikrlashingiz juda yuqori.
+                    </p>
+
+                    <div class="flex items-center justify-center gap-4 pt-2">
+                        <button onclick="resetTestView()" class="px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Qaytadan topshirish
+                        </button>
+                        <button onclick="navigate('schedule')" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition">
+                            <i class="fa-solid fa-house mr-2"></i> Bosh sahifaga
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 4: BIZ HAQIMIZDA (ABOUT US) -->
+            <section id="view-about" class="view-section space-y-8 hidden">
+                <!-- Hero Section -->
+                <div class="relative bg-gradient-to-br from-slate-900 via-tech-card to-brand-950 border border-tech-border rounded-3xl p-8 md:p-12 overflow-hidden shadow-2xl">
+                    <div class="max-w-2xl relative z-10 space-y-4">
+                        <span class="px-3 py-1 bg-brand-500/20 text-brand-300 text-xs font-mono font-semibold rounded-full border border-brand-500/30">
+                            Kelajak Muhandislari Maskani
+                        </span>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                            Ixtisoslashtirilgan Muhandislik Maktabiga Xush Kelibsiz!
+                        </h2>
+                        <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                            Bizning maktabimiz eng zamonaviy STEM texnologiyalari, robototexnika, Sun'iy Intellekt va oliy darajadagi fizika-matematika metodologiyasi asosida yosh iqtidorlarni kelajak injenerlariga aylantiradi.
+                        </p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 opacity-15 pointer-events-none p-6 text-brand-400 text-9xl">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                </div>
+
+                <!-- Stats counter -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-tech-card border border-tech-border p-5 rounded-2xl text-center">
+                        <div class="text-2xl font-extrabold text-brand-400 font-mono">100%</div>
+                        <div class="text-xs text-slate-400 mt-1">Zamonaviy Laboratoriyalar</div>
+                    </div>
+                    <div class="bg-tech-card border border-tech-border p-5 rounded-2xl text-center">
+                        <div class="text-2xl font-extrabold text-cyan-400 font-mono">24+</div>
+                        <div class="text-xs text-slate-400 mt-1">Xalqaro Robototexnika Yutuqlari</div>
+                    </div>
+                    <div class="bg-tech-card border border-tech-border p-5 rounded-2xl text-center">
+                        <div class="text-2xl font-extrabold text-emerald-400 font-mono">1:1</div>
+                        <div class="text-xs text-slate-400 mt-1">Kompyuter va Jihoz bilan Ta'minlanganlik</div>
+                    </div>
+                    <div class="bg-tech-card border border-tech-border p-5 rounded-2xl text-center">
+                        <div class="text-2xl font-extrabold text-purple-400 font-mono">7 - 11</div>
+                        <div class="text-xs text-slate-400 mt-1">Sinflar bo'yicha Ixtisoslashuv</div>
+                    </div>
+                </div>
+
+                <!-- School Features / Labs -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-white">Bizning Ilmiy-Amaliy Yo'nalishlarimiz</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-tech-card border border-tech-border p-6 rounded-2xl space-y-3 hover:border-brand-500/50 transition">
+                            <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-base">Robototexnika va Mexatronika</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Arduino, Raspberry Pi, sanoat manipulatorlari va mikrocontrollers asosida robotlarni loyihalash hamda dasturlash mashg'ulotlari.
+                            </p>
+                        </div>
+
+                        <div class="bg-tech-card border border-tech-border p-6 rounded-2xl space-y-3 hover:border-cyan-500/50 transition">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-cube"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-base">3D Modellashtirish va CAD</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                AutoCAD, Fusion 360 va SolidWorks dasturlarida uch o'lchamli muhandislik detallarini loyihalash hamda 3D printerlarda chop etish.
+                            </p>
+                        </div>
+
+                        <div class="bg-tech-card border border-tech-border p-6 rounded-2xl space-y-3 hover:border-emerald-500/50 transition">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <h4 class="font-bold text-white text-base">Sun'iy Intellekt & Dasturlash</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Python, C++ va algoritmik mantiq yordamida neyron tarmoqlari, kompyuter ko'rish hamda aqlli tizimlarni yaratish tajribasi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-slate-900 border-t border-tech-border/80 py-6 text-center text-xs text-slate-500">
+            <p>© 2026 Muhandislik va STEM Ixtisoslashtirilgan Maktab Portali. Barcha huquqlar himoyalangan.</p>
+        </footer>
+    </div>
+
+    <!-- MODAL 1: WARNING MODAL FOR CHEATING ATTEMPTS -->
+    <div id="cheat-warning-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-tech-card border-2 border-rose-500 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4 glow-red">
+            <div class="w-16 h-16 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center text-3xl mx-auto animate-bounce">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">Diqqat! Qoida buzilishi aniqlandi</h3>
+            <p id="cheat-modal-msg" class="text-xs text-slate-300 leading-relaxed">
+                Test vaqtida boshqa oynaga/vkladkaga o'tish taqiqlanadi! Siz <span id="cheat-strike-num" class="font-bold text-rose-400">1</span>-marta ogohlantirildingiz. (3 marta ogohlantirishdan so'ng test bekor qilinadi).
+            </p>
+            <button onclick="closeCheatModal()" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl transition text-sm">
+                Tushundim, Testga Qaytish
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* GLOBAL APPLICATION STATE */
+        const state = {
+            currentUser: null,
+            currentView: 'schedule',
+            activeClass: '10-A',
+            test: {
+                active: false,
+                grade: '10',
+                subject: 'math',
+                questions: [],
+                currentIndex: 0,
+                userAnswers: {}, // { qIndex: selectedOptionIndex }
+                statusMap: {},   // { qIndex: 'green' | 'yellow' | 'red' }
+                warnings: 0,
+                timerSeconds: 900,
+                intervalId: null
+            }
+        };
+
+        /* TIMETABLE DATA (ROBUSTO SPECIALIZED SCHOOL SCHEDULE) */
+        const scheduleData = {
+            "7-A": {
+                1: [ // Dushanba
+                    { time: "08:30 - 09:15", subject: "Matematika (Algebra)", teacher: "A. Karimov", room: "301-Xona", type: "Nazariy" },
+                    { time: "09:25 - 10:10", subject: "Fizika Asoslari", teacher: "S. Rahmonov", room: "102-Lab", type: "Amaliy" },
+                    { time: "10:20 - 11:05", subject: "Ingliz Tili (STEM)", teacher: "M. Smith", room: "204-Xona", type: "Til" },
+                    { time: "11:15 - 12:00", subject: "Informatika & Dasturlash", teacher: "N. Qodirov", room: "IT-Lab 1", type: "Kompyuter" },
+                    { time: "12:10 - 12:55", subject: "Robototexnika Boshlang'ich", teacher: "B. Yoqubov", room: "Robo-Lab", type: "Loyiha" }
+                ],
+                2: [ // Seshanba
+                    { time: "08:30 - 09:15", subject: "Geometriya", teacher: "A. Karimov", room: "301-Xona", type: "Nazariy" },
+                    { time: "09:25 - 10:10", subject: "O'zbek Tili", teacher: "X. Umarova", room: "201-Xona", type: "Gumanitar" },
+                    { time: "10:20 - 11:05", subject: "Fizika (Laboratoriya)", teacher: "S. Rahmonov", room: "102-Lab", type: "Amaliy" },
+                    { time: "11:15 - 12:00", subject: "3D Modellashtirish", teacher: "B. Yoqubov", room: "CAD-Lab", type: "Loyiha" },
+                    { time: "12:10 - 12:55", subject: "Jismoniy Tarbiya", teacher: "D. Aliyev", room: "Sport Zal", type: "Sport" }
+                ],
+                3: [ // Chorshanba
+                    { time: "08:30 - 09:15", subject: "Matematika (Algebra)", teacher: "A. Karimov", room: "301-Xona", type: "Nazariy" },
+                    { time: "09:25 - 10:10", subject: "Kimyo", teacher: "G. Sobirova", room: "Chem-Lab", type: "Amaliy" },
+                    { time: "10:20 - 11:05", subject: "Ingliz Tili", teacher: "M. Smith", room: "204-Xona", type: "Til" },
+                    { time: "11:15 - 12:00", subject: "Chizmachilik & CAD", teacher: "E. Mahmudov", room: "CAD-Lab", type: "Grafika" }
+                ],
+                4: [ // Payshanba
+                    { time: "08:30 - 09:15", subject: "Algoritmlash", teacher: "N. Qodirov", room: "IT-Lab 1", type: "Kompyuter" },
+                    { time: "09:25 - 10:10", subject: "Fizika", teacher: "S. Rahmonov", room: "102-Lab", type: "Nazariy" },
+                    { time: "10:20 - 11:05", subject: "Biologiya", teacher: "G. Sobirova", room: "Bio-Lab", type: "Nazariy" },
+                    { time: "11:15 - 12:00", subject: "Tarix", teacher: "R. Jalolov", room: "105-Xona", type: "Gumanitar" }
+                ],
+                5: [ // Juma
+                    { time: "08:30 - 09:15", subject: "Matematika Olimpiada", teacher: "A. Karimov", room: "301-Xona", type: "Muhandislik" },
+                    { time: "09:25 - 10:10", subject: "Robototexnika", teacher: "B. Yoqubov", room: "Robo-Lab", type: "Amaliy" },
+                    { time: "10:20 - 11:05", subject: "Ingliz Tili", teacher: "M. Smith", room: "204-Xona", type: "Til" },
+                    { time: "11:15 - 12:00", subject: "Adabiyot", teacher: "X. Umarova", room: "201-Xona", type: "Gumanitar" }
+                ],
+                6: [ // Shanba
+                    { time: "08:30 - 09:15", subject: "STEM Loyiha Soati", teacher: "Jamoa", room: "Makerspace", type: "Loyiha" },
+                    { time: "09:25 - 10:10", subject: "Kiberxavfsizlik Asoslari", teacher: "N. Qodirov", room: "IT-Lab 2", type: "Kompyuter" }
+                ]
+            }
+        };
+
+        // Fill fallback schedules for other grades using template copy
+        const gradesList = ["7-B", "8-A", "8-B", "9-A", "9-B", "10-A", "10-B", "11-A", "11-B"];
+        gradesList.forEach(g => {
+            if (!scheduleData[g]) {
+                scheduleData[g] = JSON.parse(JSON.stringify(scheduleData["7-A"]));
+            }
+        });
+
+        /* NEWS DATA */
+        const newsData = [
+            {
+                id: 1,
+                title: "O'quvchilarimiz Xalqaro Robototexnika Olimpiadasida Oltin Medal Qo'lga Kiritishdi",
+                date: "02 Sentabr, 2026",
+                category: "Yutuqlar",
+                img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500&auto=format&fit=crop&q=60",
+                desc: "Janubiy Koreyada bo'lib o'tgan STEM Robotics Challenge musobaqasida 10-A sinf o'quvchilari avtonom qutqaruvchi robot loyihasi bilan 1-o'rinni egallashdi."
+            },
+            {
+                id: 2,
+                title: "Maktabimizda Yangi Sun'iy Intellekt va Neyron Tarmoqlar Laboratoriyasi Ochildi",
+                date: "28 Avgust, 2026",
+                category: "Laboratoriya",
+                img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=60",
+                desc: "Laboratoriya eng so'nggi GPU grafik stansiyalari va mikroprotsessorlar bilan jihozlangan bo'lib, o'quvchilarga Computer Vision loyihalarida yordam beradi."
+            },
+            {
+                id: 3,
+                title: "Matematika va Fizika Fanlaridan Chuqurlashtirilgan Hackathon E'lon Qilindi",
+                date: "20 Avgust, 2026",
+                category: "Musobaqa",
+                img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=500&auto=format&fit=crop&q=60",
+                desc: "Kelasi haftada 8-11 sinf o'quvchilari o'rtasida 24 soatlik uzluksiz mantiqiy muhandislik masalalarini yechish bo'yicha hackathon o'tkaziladi."
+            }
+        ];
+
+        /* HIGH SCHOOL TEST QUESTION BANK (MATHEMATICS & ENGLISH SPECIALIZED 7-11) */
+        const testBank = {
+            math: [
+                {
+                    q: "Agar $x^2 - 5x + 6 = 0$ va $x > 2$ bo'lsa, $x^3 - 3x$ ning qiymatini toping.",
+                    options: ["18", "24", "12", "30"],
+                    correct: 0
+                },
+                {
+                    q: "Vektorlar $\\vec{a} = (3, 4)$ va $\\vec{b} = (-4, 3)$ berilgan. Ular orasidagi burchak kosinusini toping.",
+                    options: ["1", "0", "-1", "0.5"],
+                    correct: 1
+                },
+                {
+                    q: "Muhandislik konstruksiyasidagi uchburchak tomonlari 5 sm, 12 sm va 13 sm. Uning yuzini toping.",
+                    options: ["30 sm²", "60 sm²", "25 sm²", "65 sm²"],
+                    correct: 0
+                },
+                {
+                    q: "Hosilani toping: $f(x) = 3x^4 - 5x^2 + 7$",
+                    options: ["$12x^3 - 10x$", "$7x^3 - 10x$", "$12x^3 - 5$", "$4x^3 - 10x$"],
+                    correct: 0
+                },
+                {
+                    q: "Aritmetik progressiyada $a_1 = 4$ va $d = 3$. Dastlabki 10 ta had yig'indisi $S_{10}$ nechaga teng?",
+                    options: ["175", "160", "190", "150"],
+                    correct: 0
+                },
+                {
+                    q: "Tenglamani yeching: $\\log_2(x - 1) = 3$",
+                    options: ["9", "8", "7", "10"],
+                    correct: 0
+                },
+                {
+                    q: "Robot harakat yo'nalishi $y = 2x + 1$ to'g'ri chizig'iga parallel. Ushbu chiziqning burchak koeffitsienti ($k$) nechaga teng?",
+                    options: ["2", "1", "0.5", "-2"],
+                    correct: 0
+                },
+                {
+                    q: "Doiraning radiusi $R = 6$ sm. Uning doira yuzi nechaga teng? ($\\pi$ qoldirilsin)",
+                    options: ["36$\\pi$", "12$\\pi$", "24$\\pi$", "18$\\pi$"],
+                    correct: 0
+                },
+                {
+                    q: "Trigonometriya: $\\sin^2(\\alpha) + \\cos^2(\\alpha) + \\tan(45^\\circ)$ ifodaning qiymati necha?",
+                    options: ["2", "1", "0", "3"],
+                    correct: 0
+                },
+                {
+                    q: "Kombinatorika: 5 ta turli microchip kontrolleridan 2 tasini necha xil usulda tanlab olish mumkin ($C_5^2$)?",
+                    options: ["10", "20", "5", "15"],
+                    correct: 0
+                }
+            ],
+            english: [
+                {
+                    q: "Choose the correct term: The new robotic arm operates with extreme __________, reducing errors to zero.",
+                    options: ["precision", "precisely", "precise", "imprecision"],
+                    correct: 0
+                },
+                {
+                    q: "Identify the correct conditional: 'If engineers ________ the circuit correctly, the machine would have started.'",
+                    options: ["had designed", "design", "will design", "have designed"],
+                    correct: 0
+                },
+                {
+                    q: "Which word means 'the capacity to absorb or store electrical energy'?",
+                    options: ["Capacitance", "Resistance", "Voltage", "Induction"],
+                    correct: 0
+                },
+                {
+                    q: "Choose the correct passive voice: 'Scientists tested the AI algorithm yesterday.'",
+                    options: ["The AI algorithm was tested by scientists yesterday.", "The AI algorithm is tested by scientists.", "The AI algorithm has tested scientists.", "Scientists were tested by AI."],
+                    correct: 0
+                },
+                {
+                    q: "Complete the sentence: 'Unlike classical computers, quantum computers process data ________.'",
+                    options: ["simultaneously", "simultaneous", "simultaneity", "simulating"],
+                    correct: 0
+                },
+                {
+                    q: "What does the abbreviation 'CAD' stand for in engineering?",
+                    options: ["Computer-Aided Design", "Central Algorithm Device", "Control Applied Data", "Calculated Architecture Diagram"],
+                    correct: 0
+                },
+                {
+                    q: "Select the synonym for 'INNOVATIVE':",
+                    options: ["Pioneering / Groundbreaking", "Outdated", "Repetitive", "Ordinary"],
+                    correct: 0
+                },
+                {
+                    q: "Choose the sentence with correct relative clause:",
+                    options: ["The engineer who invented this sensor won a global prize.", "The engineer which invented this sensor won.", "The engineer whose invent this sensor.", "The engineer where invented."],
+                    correct: 0
+                },
+                {
+                    q: "Select the correct prepositions: 'The rover landed ____ Mars ____ February 2021.'",
+                    options: ["on / in", "in / at", "at / on", "to / on"],
+                    correct: 0
+                },
+                {
+                    q: "Choose the correct modal verb for obligation in safety rules: 'Students _____ wear protective goggles in the physics lab.'",
+                    options: ["must", "might", "could", "would"],
+                    correct: 0
+                }
+            ]
+        };
+
+        /* INITIALIZATION & AUTHENTICATION HANDLERS */
+        window.addEventListener('load', () => {
+            // Update time display
+            updateLiveTime();
+            // Check stored login state
+            const savedUser = localStorage.getItem('engineering_school_user');
+            if (savedUser) {
+                state.currentUser = JSON.parse(savedUser);
+                showMainApp();
+            } else {
+                showAuthScreen();
+            }
+
+            // Setup Tab Switch / Blur event listener for anti-cheat
+            setupAntiCheatListener();
+        });
+
+        function updateLiveTime() {
+            const date = new Date();
+            const days = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
+            const dayName = days[date.getDay()];
+            const formatted = `${dayName}, ${date.getDate().toString().padStart(2,'0')}.${(date.getMonth()+1).toString().padStart(2,'0')}.${date.getFullYear()}`;
+            const timeEl = document.getElementById('live-time-display');
+            if (timeEl) timeEl.innerText = `Bugun: ${formatted}`;
+
+            // Set default schedule selectors to current day (if weekday)
+            const scheduleDaySel = document.getElementById('schedule-day-select');
+            if (scheduleDaySel) {
+                let currentDayIndex = date.getDay(); 
+                if (currentDayIndex === 0) currentDayIndex = 1; // Default to Dushanba on Sunday
+                scheduleDaySel.value = currentDayIndex;
+            }
+        }
+
+        function switchAuthMode(mode) {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            if (mode === 'register') {
+                loginForm.classList.add('hidden');
+                regForm.classList.remove('hidden');
+            } else {
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const id = document.getElementById('login-id').value.trim();
+            if (!id) return;
+
+            // Default fallback if logging in without prior register
+            state.currentUser = {
+                firstName: id,
+                lastName: '',
+                grade: '10-A'
+            };
+            localStorage.setItem('engineering_school_user', JSON.stringify(state.currentUser));
+            showMainApp();
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const fname = document.getElementById('reg-firstname').value.trim();
+            const lname = document.getElementById('reg-lastname').value.trim();
+            const userClass = document.getElementById('reg-class').value;
+
+            if (!fname || !lname || !userClass) {
+                alert("Iltimos, barcha maydonlarni to'ldiring!");
+                return;
+            }
+
+            state.currentUser = {
+                firstName: fname,
+                lastName: lname,
+                grade: userClass
+            };
+            localStorage.setItem('engineering_school_user', JSON.stringify(state.currentUser));
+            showMainApp();
+        }
+
+        function logout() {
+            localStorage.removeItem('engineering_school_user');
+            state.currentUser = null;
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+            switchAuthMode('login');
+        }
+
+        function showAuthScreen() {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+
+            // Set user profile info
+            const user = state.currentUser;
+            document.getElementById('user-display-name').innerText = `${user.firstName} ${user.lastName}`.trim();
+            document.getElementById('user-display-class').innerText = `${user.grade} sinf`;
+            document.getElementById('user-avatar-initial').innerText = user.firstName.charAt(0).toUpperCase();
+
+            // Set default class selector
+            document.getElementById('schedule-class-select').value = user.grade;
+            state.activeClass = user.grade;
+
+            // Render default view
+            renderSchedule();
+            renderNews();
+            navigate('schedule');
+        }
+
+        /* NAVIGATION CONTROL */
+        function navigate(viewName) {
+            if (state.test.active && viewName !== 'tests') {
+                if (!confirm("Test davom etmoqda. Chiqib ketsangiz test natijangiz saqlanmaydi! Baribir chiqmoqchimisiz?")) {
+                    return;
+                } else {
+                    resetTestState();
+                }
+            }
+
+            state.currentView = viewName;
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+            
+            const target = document.getElementById(`view-${viewName}`);
+            if (target) target.classList.remove('hidden');
+
+            // Highlight nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+            const activeNav = document.getElementById(`nav-${viewName}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-brand-600', 'text-white');
+                activeNav.classList.remove('text-slate-300');
+            }
+        }
+
+        /* TIMETABLE / SCHEDULE RENDERER */
+        function renderSchedule() {
+            const classVal = document.getElementById('schedule-class-select').value;
+            const dayVal = document.getElementById('schedule-day-select').value;
+            const tbody = document.getElementById('schedule-tbody');
+            const titleEl = document.getElementById('schedule-title');
+
+            const dayNamesMap = {
+                "1": "Dushanba", "2": "Seshanba", "3": "Chorshanba",
+                "4": "Payshanba", "5": "Juma", "6": "Shanba"
+            };
+
+            titleEl.innerText = `${classVal} sinf uchun ${dayNamesMap[dayVal]} dars jadvali`;
+
+            const classSchedule = scheduleData[classVal] || scheduleData["7-A"];
+            const dayLessons = classSchedule[dayVal] || [];
+
+            tbody.innerHTML = "";
+
+            if (dayLessons.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-slate-500">
+                            Bugun darslar mavjud emas (Dam olish kuni).
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            dayLessons.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/50 transition";
+                
+                let badgeStyle = "bg-brand-500/10 text-brand-400 border-brand-500/30";
+                if (item.type === "Amaliy") badgeStyle = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+                if (item.type === "Kompyuter" || item.type === "Loyiha") badgeStyle = "bg-cyan-500/10 text-cyan-400 border-cyan-500/30";
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-mono text-xs font-semibold text-slate-300">
+                        <span class="text-brand-400 mr-2">#${index + 1}</span> ${item.time}
+                    </td>
+                    <td class="px-6 py-4 font-bold text-white text-sm">
+                        ${item.subject}
+                    </td>
+                    <td class="px-6 py-4 text-slate-300 text-xs">
+                        <i class="fa-regular fa-user mr-1.5 text-slate-500"></i>${item.teacher}
+                    </td>
+                    <td class="px-6 py-4 font-mono text-xs text-brand-300">
+                        <i class="fa-solid fa-location-dot mr-1.5 text-slate-500"></i>${item.room}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="px-2.5 py-1 rounded-full text-[11px] border ${badgeStyle} font-semibold">
+                            ${item.type}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* NEWS RENDERER */
+        function renderNews() {
+            const grid = document.getElementById('news-grid');
+            if (!grid) return;
+            grid.innerHTML = newsData.map(item => `
+                <div class="bg-tech-card border border-tech-border rounded-2xl overflow-hidden hover:border-brand-500/50 transition flex flex-col justify-between shadow-lg">
+                    <div>
+                        <div class="h-44 w-full overflow-hidden relative">
+                            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/38bdf8?text=STEM+News'">
+                            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-lg text-[11px] font-mono text-brand-300 border border-tech-border">
+                                ${item.category}
+                            </span>
+                        </div>
+                        <div class="p-5 space-y-2">
+                            <span class="text-[11px] font-mono text-slate-400 block">${item.date}</span>
+                            <h3 class="font-bold text-white text-base leading-snug">${item.title}</h3>
+                            <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <button onclick="alert('Yangilikning to\\'liq matni tez orada joylashtiriladi!')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-brand-300 text-xs font-semibold rounded-xl border border-tech-border transition">
+                            Batafsil o'qish <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* QUIZ / TEST ENGINE WITH ANTI-CHEAT MONITORS */
+        function startQuiz() {
+            const grade = document.getElementById('test-grade-select').value;
+            const subject = document.getElementById('test-subject-select').value;
+
+            state.test.active = true;
+            state.test.grade = grade;
+            state.test.subject = subject;
+            state.test.warnings = 0;
+            state.test.currentIndex = 0;
+            state.test.userAnswers = {};
+            state.test.statusMap = {};
+            state.test.timerSeconds = 900; // 15 minutes
+
+            // Load question bank
+            const sourceQuestions = testBank[subject] || testBank.math;
+            // Shuffle copy or take full list
+            state.test.questions = [...sourceQuestions];
+
+            // Initialize statusMap: default 'red' (unanswered)
+            state.test.questions.forEach((_, idx) => {
+                state.test.statusMap[idx] = 'red';
+            });
+
+            // UI updates
+            document.getElementById('test-selector-card').classList.add('hidden');
+            document.getElementById('quiz-result-card').classList.add('hidden');
+            document.getElementById('active-quiz-container').classList.remove('hidden');
+
+            const subName = subject === 'math' ? 'Matematika' : 'Ingliz tili';
+            document.getElementById('active-quiz-badge').innerText = `${subName} - ${grade} Sinf`;
+            document.getElementById('warning-count-text').innerText = `0/3`;
+
+            // Start Countdown Timer
+            clearInterval(state.test.intervalId);
+            state.test.intervalId = setInterval(updateQuizTimer, 1000);
+
+            // Render current question
+            renderQuestion();
+            renderPaletteGrid();
+        }
+
+        function renderQuestion() {
+            const q = state.test.questions[state.test.currentIndex];
+            const qNum = state.test.currentIndex + 1;
+            const totalQ = state.test.questions.length;
+
+            document.getElementById('question-number-indicator').innerText = `Savol ${qNum} / ${totalQ}`;
+            document.getElementById('question-text').innerText = q.q;
+
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+
+            const selectedOpt = state.test.userAnswers[state.test.currentIndex];
+
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = selectedOpt === optIdx;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectOption(optIdx);
+                btn.className = `w-full text-left p-4 rounded-xl border text-sm font-medium transition flex items-center justify-between ${
+                    isSelected 
+                        ? 'bg-brand-600/20 border-brand-500 text-white shadow-md' 
+                        : 'bg-slate-900/60 border-tech-border text-slate-300 hover:bg-slate-800'
+                }`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg border border-tech-border flex items-center justify-center font-mono text-xs font-bold ${
+                            isSelected ? 'bg-brand-500 text-white border-brand-400' : 'bg-slate-800 text-slate-400'
+                        }">
+                            ${String.fromCharCode(65 + optIdx)}
+                        </span>
+                        <span>${optText}</span>
+                    </div>
+                    ${isSelected ? '<i class="fa-solid fa-circle-check text-brand-400 text-base"></i>' : ''}
+                `;
+                optsContainer.appendChild(btn);
+            });
+
+            // Update Prev / Next button states
+            document.getElementById('btn-prev-q').disabled = state.test.currentIndex === 0;
+            const nextBtn = document.getElementById('btn-next-q');
+            if (state.test.currentIndex === totalQ - 1) {
+                nextBtn.innerHTML = `Natijani Ko'rish <i class="fa-solid fa-check-double ml-1"></i>`;
+                nextBtn.onclick = finishQuizConfirmation;
+            } else {
+                nextBtn.innerHTML = `Keyingisi <i class="fa-solid fa-arrow-right ml-1"></i>`;
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+
+        function selectOption(optIdx) {
+            const curIdx = state.test.currentIndex;
+            state.test.userAnswers[curIdx] = optIdx;
+            // Mark status as Green (Answered)
+            state.test.statusMap[curIdx] = 'green';
+
+            renderQuestion();
+            renderPaletteGrid();
+        }
+
+        function toggleBookmarkQuestion() {
+            const curIdx = state.test.currentIndex;
+            // Toggle yellow status
+            if (state.test.statusMap[curIdx] === 'yellow') {
+                state.test.statusMap[curIdx] = (state.test.userAnswers[curIdx] !== undefined) ? 'green' : 'red';
+            } else {
+                state.test.statusMap[curIdx] = 'yellow';
+            }
+            renderPaletteGrid();
+        }
+
+        function nextQuestion() {
+            if (state.test.currentIndex < state.test.questions.length - 1) {
+                state.test.currentIndex++;
+                renderQuestion();
+                renderPaletteGrid();
+            }
+        }
+
+        function prevQuestion() {
+            if (state.test.currentIndex > 0) {
+                state.test.currentIndex--;
+                renderQuestion();
+                renderPaletteGrid();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            state.test.currentIndex = index;
+            renderQuestion();
+            renderPaletteGrid();
+        }
+
+        /* PALETTE GRID RENDERER (GREEN = BELGILANAN, YELLOW = SAQLANYAPTI, RED = BELGILANMAGAN) */
+        function renderPaletteGrid() {
+            const grid = document.getElementById('question-palette-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            state.test.questions.forEach((_, idx) => {
+                const status = state.test.statusMap[idx] || 'red';
+                const isCurrent = state.test.currentIndex === idx;
+
+                let bgClass = "bg-rose-600/80 hover:bg-rose-500 text-white"; // Red (Unanswered)
+                if (status === 'green') bgClass = "bg-emerald-600 hover:bg-emerald-500 text-white"; // Green (Answered)
+                if (status === 'yellow') bgClass = "bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold"; // Yellow (Saved/Review)
+
+                const btn = document.createElement('button');
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.className = `w-10 h-10 rounded-xl font-mono text-xs font-bold transition flex items-center justify-center ${bgClass} ${
+                    isCurrent ? 'ring-2 ring-white ring-offset-2 ring-offset-slate-900 scale-105' : ''
+                }`;
+                btn.innerText = idx + 1;
+                grid.appendChild(btn);
+            });
+        }
+
+        function updateQuizTimer() {
+            state.test.timerSeconds--;
+            if (state.test.timerSeconds <= 0) {
+                clearInterval(state.test.intervalId);
+                alert("Vaqt tugadi! Test natijalari avtomatik hisoblanmoqda.");
+                submitQuiz();
+                return;
+            }
+            const mins = Math.floor(state.test.timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (state.test.timerSeconds % 60).toString().padStart(2, '0');
+            const timerEl = document.getElementById('quiz-timer');
+            if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+        }
+
+        /* ANTI-CHEAT LISTENER (TAB SWITCH DETECTOR) */
+        function setupAntiCheatListener() {
+            const handleFocusLoss = () => {
+                if (!state.test.active) return;
+
+                state.test.warnings++;
+                document.getElementById('warning-count-text').innerText = `${state.test.warnings}/3`;
+
+                if (state.test.warnings > 3) {
+                    // Exceeded max warnings -> Redirect to Dashboard
+                    clearInterval(state.test.intervalId);
+                    state.test.active = false;
+                    document.getElementById('cheat-warning-modal').classList.add('hidden');
+                    alert("Siz ogohlantirishlar sonidan (3 marta) oshib ketdingiz! Test bekor qilindi va Dashboard'ga qaytarildingiz.");
+                    resetTestState();
+                    navigate('schedule');
+                } else {
+                    // Show modal warning
+                    document.getElementById('cheat-strike-num').innerText = state.test.warnings;
+                    document.getElementById('cheat-warning-modal').classList.remove('hidden');
+                }
+            };
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) handleFocusLoss();
+            });
+
+            window.addEventListener('blur', handleFocusLoss);
+        }
+
+        function closeCheatModal() {
+            document.getElementById('cheat-warning-modal').classList.add('hidden');
+        }
+
+        function finishQuizConfirmation() {
+            const unanswered = state.test.questions.length - Object.keys(state.test.userAnswers).length;
+            let msg = "Testni yakunlashni tasdiqlaysizmi?";
+            if (unanswered > 0) {
+                msg = `Sizda yana ${unanswered} ta belgilanmagan savol bor. Baribir testni yakunlaysizmi?`;
+            }
+            if (confirm(msg)) {
+                submitQuiz();
+            }
+        }
+
+        function submitQuiz() {
+            clearInterval(state.test.intervalId);
+            state.test.active = false;
+
+            let correctCount = 0;
+            state.test.questions.forEach((q, idx) => {
+                if (state.test.userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const total = state.test.questions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+
+            document.getElementById('res-total-q').innerText = total;
+            document.getElementById('res-correct-q').innerText = correctCount;
+            document.getElementById('res-percentage').innerText = `${percentage}%`;
+
+            let feedback = "A'lo natija! Muhandislik mantiqiy va analitik fikrlashingiz juda yuqori.";
+            if (percentage < 80) feedback = "Yaxshi natija! Yana ozgina tayyorgarlik bilan 100% ga erishishingiz mumkin.";
+            if (percentage < 50) feedback = "Yomon emas, ammo fan bo'yicha qo'shimcha nazariy topshiriqlarni takrorlash tavsiya etiladi.";
+
+            document.getElementById('res-feedback-text').innerText = feedback;
+
+            document.getElementById('active-quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result-card').classList.remove('hidden');
+        }
+
+        function resetTestView() {
+            document.getElementById('quiz-result-card').classList.add('hidden');
+            document.getElementById('test-selector-card').classList.remove('hidden');
+            resetTestState();
+        }
+
+        function resetTestState() {
+            clearInterval(state.test.intervalId);
+            state.test.active = false;
+            state.test.warnings = 0;
+            state.test.userAnswers = {};
+            state.test.statusMap = {};
+        }
+    </script>
+</body>
+</html>
